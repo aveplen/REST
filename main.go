@@ -16,18 +16,7 @@ const (
 )
 
 func main() {
-	/*
-		psqlInfo := fmt.Sprintf(
-			"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-			host,
-			port,
-			user,
-			password,
-			dbname,
-		)
-	*/
 	psqlInfo := fmt.Sprintf(
-		// "postgresql://mypgsql:1234@localhost:5432/myDB?sslmode=disable",
 		"postgresql://%s:%s@%s:%d/%s?sslmode=disable",
 		user,
 		password,
