@@ -68,7 +68,9 @@ CREATE TABLE cridentials (
 ,   second_name         VARCHAR(255)    NOT NULL
 ,   gender              VARCHAR(6)      NOT NULL
 ,   date_of_birth       DATE            NOT NULL
+-- add NOT NULL for authentication
 ,   email               VARCHAR(255)
+-- add salted password for authentication
 
 ,   CONSTRAINT unique_email UNIQUE (email)
 );

@@ -8,5 +8,9 @@ type Cridentials struct {
 	SecondName    string    `json:"secondName"`
 	Gender        string    `json:"gender"`
 	DateOfBirth   time.Time `json:"dateOfBirth"`
-	Email         string    `json:"email,omitempty"`
+
+	// remove omitempty for authentication
+	Email string `json:"email,omitempty"`
+
+	// add salted password for authentication
 }
