@@ -3,6 +3,6 @@ package models
 type School struct {
 	SchoolID     int64  `json:"schoolID"`
 	SchoolNumber string `json:"schoolNumber"`
-	CityID       int64  `json:"dityID"`
+	City         *City  `json:"city"`
 	GeoAdress    string `json:"geoAdress"`
 }

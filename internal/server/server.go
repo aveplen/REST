@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/aveplen/REST/internal/config"
+	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
@@ -31,6 +32,7 @@ func (s *Server) Start() error {
 	s.configureRouter()
 
 	s.logger.Info("starting server")
+
 	return http.ListenAndServe(s.config.Srv.BindAddr, s.router)
 }
 
@@ -44,10 +46,13 @@ func (s *Server) configureLogger(config config.Logrus) error {
 }
 
 func (s *Server) configureRouter() {
-	s.router.HandleFunc("/hello", s.handleHello())
+	s.router.HandleFunc("/hello", handleHello())
+	s.router.HandleFunc("/api/students", handles.ApiStudentsGet()).Methods("GET")
+	s.router.HandleFunc("/api/students/{id:[0-9]+}", handles.ApiStudentsGetID(s.logger)).Methods("GET")
+	s.router.HandleFunc("/api/students", handles.ApiStudentsPost()).Methods("POST")
 }
 
-func (s *Server) handleHello() http.HandlerFunc {
+func handleHello() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Hello!")
 	}

@@ -77,11 +77,11 @@ CREATE TABLE cridentials (
 
 CREATE TABLE students (
     student_id          BIGSERIAL       NOT NULL    PRIMARY KEY
-,   scores_id           BIGINT          NOT NULL
+,   score_id           BIGINT          NOT NULL
 ,   school_id           BIGINT          NOT NULL
 ,   cridetials_id       BIGINT          NOT NULL
 
-,   CONSTRAINT scores_id_fk FOREIGN KEY (scores_id)
+,   CONSTRAINT score_id_fk FOREIGN KEY (score_id)
         REFERENCES public.scores (score_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE

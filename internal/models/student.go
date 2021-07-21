@@ -1,8 +1,8 @@
 package models
 
 type Student struct {
-	StudentID    int64 `json:"studentID"`
-	ScoresID     int64 `json:"scoresID"`
-	SchoolID     int64 `json:"schoolID"`
-	CridetialsID int64 `json:"cridetialsID"`
+	StudentID  int64        `json:"studentID"`
+	Score      *Score       `json:"score"`
+	School     *School      `json:"school"`
+	Cridetials *Cridentials `json:"cridetials"`
 }
