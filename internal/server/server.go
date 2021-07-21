@@ -47,9 +47,22 @@ func (s *Server) configureLogger(config config.Logrus) error {
 
 func (s *Server) configureRouter() {
 	s.router.HandleFunc("/hello", handleHello())
-	s.router.HandleFunc("/api/students", handles.ApiStudentsGet()).Methods("GET")
-	s.router.HandleFunc("/api/students/{id:[0-9]+}", handles.ApiStudentsGetID(s.logger)).Methods("GET")
-	s.router.HandleFunc("/api/students", handles.ApiStudentsPost()).Methods("POST")
+	api := s.router.PathPrefix("/api").Subrouter()
+	{
+		students := api.PathPrefix("/students").Subrouter()
+		{
+			studentsGet := students.Methods("GET").Subrouter()
+			{
+				studentsGet.HandleFunc("/{id:[0-9]+}", handles.ApiStudentsGetID(s.logger))
+				studentsGet.HandleFunc("/", handles.ApiStudentsGet())
+			}
+			studentsPost := students.Methods("POST").Subrouter()
+			{
+				studentsPost.HandleFunc("/", handles.ApiStudentsPost())
+			}
+		}
+	}
+
 }
 
 func handleHello() http.HandlerFunc {
