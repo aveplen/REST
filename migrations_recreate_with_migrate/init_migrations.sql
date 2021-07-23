@@ -19,13 +19,13 @@ CREATE TABLE scores (
 ,   CONSTRAINT adequate_physics_score CHECK (physics
         IS NULL OR ((physics >= 0) AND (physics <= 100)))
 
-,   CONSTRAINT adequate_computer_science_sCHECK (computer_science
+,   CONSTRAINT adequate_computer_science_s CHECK (computer_science
         IS NULL OR ((computer_science >= 0) AND (computer_science <= 100)))
 
 ,   CONSTRAINT adequate_literature_score CHECK (literature
         IS NULL OR ((literature >= 0) AND (literature <= 100)))
 
-,   CONSTRAINT adequate_social_science_scoCHECK (social_science
+,   CONSTRAINT adequate_social_science_sco CHECK (social_science
         IS NULL OR ((social_science >= 0) AND (social_science <= 100)))
 
 ,   CONSTRAINT adequate_history_score CHECK (history
