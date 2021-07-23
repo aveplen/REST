@@ -1,43 +1,77 @@
 package handles
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strconv"
 
+	"github.com/aveplen/REST/internal/models"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
 
-func ApiStudentsGet() http.HandlerFunc {
+func ApiStudentsPost(logger *logrus.Logger) http.HandlerFunc {
+	logger.Info("Api Students Post route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
+		jsonDecoder := json.NewDecoder(r.Body)
+		st := models.Student{}
+		err := jsonDecoder.Decode(&st)
+		if err != nil {
+			logger.Panic(err)
+			return
+		}
+		jsonEncoder := json.NewEncoder(w)
+		err = jsonEncoder.Encode(st)
+		if err != nil {
+			logger.Panic(err)
+			return
+		}
+		// io.WriteString(w, "Hello!")
+	}
+}
+
+func ApiStudentsGet(logger *logrus.Logger) http.HandlerFunc {
+	logger.Info("Api Students Get route initialized")
+	return func(w http.ResponseWriter, r *http.Request) {
+		logger.Info("ApiStudentsGet request")
+		fmt.Println("GET")
 		io.WriteString(w, "Hello!")
 	}
 }
 
 func ApiStudentsGetID(logger *logrus.Logger) http.HandlerFunc {
+	logger.Info("Api Students Get ID route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Error("ApiStudentsGetID: 123456789")
-		logger.Info("ApiStudentsGetID")
-		logger.Panic("Api blah blah blah")
+		fmt.Println("GET_ID")
 		vars := mux.Vars(r)
 		idStr, ok := vars["id"]
 		if !ok {
 			panic("ApiStudentsGetID: id not found in request")
-
 		}
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
 			panic("ApiStudentsGetID: id is not a valid int")
 		}
 		fmt.Printf("ApiStudentsGetID: %d\n", id)
+
 		io.WriteString(w, "Hello!")
 	}
 }
 
-func ApiStudentsPost() http.HandlerFunc {
+func ApiStudentsPatch(logger *logrus.Logger) http.HandlerFunc {
+	logger.Info("Api Students Patch route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("PATCH")
+		io.WriteString(w, "Hello!")
+	}
+}
+
+func ApiStudentsDelete(logger *logrus.Logger) http.HandlerFunc {
+	logger.Info("Api Students Delete route initialized")
+	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("DELETE")
 		io.WriteString(w, "Hello!")
 	}
 }
