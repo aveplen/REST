@@ -5,28 +5,27 @@ import (
 
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 )
 
-func RouteStudents(parent *mux.Router, logger *logrus.Logger) {
+func RouteStudents(parent *mux.Router, s handles.IServer) {
 	students := parent.PathPrefix("/students").Subrouter()
 	{
 		studentsCreate := students.Methods("POST").Subrouter()
 		{
-			studentsCreate.HandleFunc("", handles.ApiStudentsPost(logger))
+			studentsCreate.HandleFunc("", handles.ApiStudentsPost(s))
 		}
 		studentsRead := students.Methods("GET").Subrouter()
 		{
-			studentsRead.HandleFunc("", handles.ApiStudentsGet(logger))
-			studentsRead.HandleFunc("/{id:[0-9]+}", handles.ApiStudentsGetID(logger))
+			studentsRead.HandleFunc("", handles.ApiStudentsGet(s))
+			studentsRead.HandleFunc("/{id:[0-9]+}", handles.ApiStudentsGetID(s))
 		}
 		studentsUpdate := students.Methods("PATCH").Subrouter()
 		{
-			studentsUpdate.HandleFunc("", handles.ApiStudentsPatch(logger))
+			studentsUpdate.HandleFunc("", handles.ApiStudentsPatch(s))
 		}
 		studentsDelete := students.Methods(http.MethodDelete).Subrouter()
 		{
-			studentsDelete.HandleFunc("", handles.ApiStudentsDelete(logger))
+			studentsDelete.HandleFunc("", handles.ApiStudentsDelete(s))
 		}
 	}
 }

@@ -2,39 +2,42 @@ package handles
 
 import (
 	"net/http"
-
-	"github.com/sirupsen/logrus"
 )
 
-func ApiCridentialsPost(logger *logrus.Logger) http.HandlerFunc {
+func ApiCridentialsPost(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Cridentials Post route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// io.WriteString(w, "Hello!")
 	}
 }
 
-func ApiCridentialsGet(logger *logrus.Logger) http.HandlerFunc {
+func ApiCridentialsGet(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Cridentials Get route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// io.WriteString(w, "Hello!")
 	}
 }
 
-func ApiCridentialsGetID(logger *logrus.Logger) http.HandlerFunc {
+func ApiCridentialsGetID(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Cridentials Get ID route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// io.WriteString(w, "Hello!")
 	}
 }
 
-func ApiCridentialsPatch(logger *logrus.Logger) http.HandlerFunc {
+func ApiCridentialsPatch(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Cridentials Patch route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// io.WriteString(w, "Hello!")
 	}
 }
 
-func ApiCridentialsDelete(logger *logrus.Logger) http.HandlerFunc {
+func ApiCridentialsDelete(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Cridentials Delete route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		// io.WriteString(w, "Hello!")

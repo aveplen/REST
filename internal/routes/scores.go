@@ -5,28 +5,27 @@ import (
 
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 )
 
-func RouteScores(parent *mux.Router, logger *logrus.Logger) {
+func RouteScores(parent *mux.Router, s handles.IServer) {
 	scores := parent.PathPrefix("/scores").Subrouter()
 	{
 		scoresCreate := scores.Methods("POST").Subrouter()
 		{
-			scoresCreate.HandleFunc("", handles.ApiScoresPost(logger))
+			scoresCreate.HandleFunc("", handles.ApiScoresPost(s))
 		}
 		scoresRead := scores.Methods("GET").Subrouter()
 		{
-			scoresRead.HandleFunc("", handles.ApiScoresGet(logger))
-			scoresRead.HandleFunc("/{id:[0-9]+}", handles.ApiScoresGetID(logger))
+			scoresRead.HandleFunc("", handles.ApiScoresGet(s))
+			scoresRead.HandleFunc("/{id:[0-9]+}", handles.ApiScoresGetID(s))
 		}
 		scoresUpdate := scores.Methods("PATCH").Subrouter()
 		{
-			scoresUpdate.HandleFunc("", handles.ApiScoresPatch(logger))
+			scoresUpdate.HandleFunc("", handles.ApiScoresPatch(s))
 		}
 		scoresDelete := scores.Methods(http.MethodDelete).Subrouter()
 		{
-			scoresDelete.HandleFunc("", handles.ApiScoresDelete(logger))
+			scoresDelete.HandleFunc("", handles.ApiScoresDelete(s))
 		}
 	}
 }

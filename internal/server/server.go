@@ -5,6 +5,7 @@ import (
 
 	"github.com/aveplen/REST/internal/config"
 	"github.com/aveplen/REST/internal/routes"
+	"github.com/aveplen/REST/internal/store"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
@@ -13,6 +14,7 @@ type Server struct {
 	config *config.Config
 	logger *logrus.Logger
 	router *mux.Router
+	store  *store.Store
 }
 
 func NewServer(config *config.Config) *Server {
@@ -20,6 +22,7 @@ func NewServer(config *config.Config) *Server {
 		config: config,
 		logger: logrus.New(),
 		router: mux.NewRouter(),
+		store:  store.NewStore(config.Pg),
 	}
 }
 
@@ -27,9 +30,10 @@ func (s *Server) Start() error {
 	if err := s.configureLogger(s.config.Log); err != nil {
 		return err
 	}
-
+	if err := s.store.Open(); err != nil {
+		return err
+	}
 	s.configureRouter()
-
 	s.logger.Info("starting server")
 
 	return http.ListenAndServe(s.config.Srv.BindAddr, s.router)
@@ -44,14 +48,21 @@ func (s *Server) configureLogger(config config.Logrus) error {
 	return nil
 }
 
+func (s *Server) GetLogger() *logrus.Logger {
+	return s.logger
+}
+
+func (s *Server) GetStore() *store.Store {
+	return s.store
+}
+
 func (s *Server) configureRouter() {
 	api := s.router.PathPrefix("/api").Subrouter()
 	{
-		routes.RouteStudents(api, s.logger)
-		routes.RouteCities(api, s.logger)
-		routes.RouteSchools(api, s.logger)
-		routes.RouteScores(api, s.logger)
-		routes.RouteCridentials(api, s.logger)
+		routes.RouteStudents(api, s)
+		routes.RouteCities(api, s)
+		routes.RouteSchools(api, s)
+		routes.RouteScores(api, s)
+		routes.RouteCridentials(api, s)
 	}
-
 }

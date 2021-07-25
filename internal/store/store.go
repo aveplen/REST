@@ -17,9 +17,9 @@ type Store struct {
 	studentRepository     *StudentRepository
 }
 
-func NewStore(config *config.Postgres) *Store {
+func NewStore(config config.Postgres) *Store {
 	return &Store{
-		config: config,
+		config: &config,
 	}
 }
 

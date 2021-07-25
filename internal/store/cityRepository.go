@@ -8,6 +8,27 @@ type CityRepository struct {
 	store *Store
 }
 
+func (cr *CityRepository) GetAll() ([]*models.City, error) {
+	cs := make([]*models.City, 0)
+	rows, err := cr.store.db.Query(
+		`
+		SELECT city_id, city_name FROM cities
+		`,
+	)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		c := &models.City{}
+		rows.Scan(
+			&c.CityID,
+			&c.CityName,
+		)
+		cs = append(cs, c)
+	}
+	return cs, nil
+}
+
 func (cr *CityRepository) Insert(c *models.City) (*models.City, error) {
 	err := cr.store.db.QueryRow(
 		`

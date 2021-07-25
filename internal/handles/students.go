@@ -9,10 +9,10 @@ import (
 
 	"github.com/aveplen/REST/internal/models"
 	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 )
 
-func ApiStudentsPost(logger *logrus.Logger) http.HandlerFunc {
+func ApiStudentsPost(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Students Post route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		jsonDecoder := json.NewDecoder(r.Body)
@@ -32,7 +32,8 @@ func ApiStudentsPost(logger *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func ApiStudentsGet(logger *logrus.Logger) http.HandlerFunc {
+func ApiStudentsGet(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Students Get route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("ApiStudentsGet request")
@@ -41,7 +42,8 @@ func ApiStudentsGet(logger *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func ApiStudentsGetID(logger *logrus.Logger) http.HandlerFunc {
+func ApiStudentsGetID(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Students Get ID route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("GET_ID")
@@ -60,7 +62,8 @@ func ApiStudentsGetID(logger *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func ApiStudentsPatch(logger *logrus.Logger) http.HandlerFunc {
+func ApiStudentsPatch(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Students Patch route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("PATCH")
@@ -68,7 +71,8 @@ func ApiStudentsPatch(logger *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func ApiStudentsDelete(logger *logrus.Logger) http.HandlerFunc {
+func ApiStudentsDelete(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
 	logger.Info("Api Students Delete route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("DELETE")

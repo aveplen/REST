@@ -5,28 +5,27 @@ import (
 
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 )
 
-func RouteCities(parent *mux.Router, logger *logrus.Logger) {
+func RouteCities(parent *mux.Router, s handles.IServer) {
 	cities := parent.PathPrefix("/cities").Subrouter()
 	{
 		citiesCreate := cities.Methods("POST").Subrouter()
 		{
-			citiesCreate.HandleFunc("", handles.ApiCitiesPost(logger))
+			citiesCreate.HandleFunc("", handles.ApiCitiesPost(s))
 		}
 		citiesRead := cities.Methods("GET").Subrouter()
 		{
-			citiesRead.HandleFunc("", handles.ApiCitiesGet(logger))
-			citiesRead.HandleFunc("/{id:[0-9]+}", handles.ApiCitiesGetID(logger))
+			citiesRead.HandleFunc("", handles.ApiCitiesGet(s))
+			citiesRead.HandleFunc("/{id:[0-9]+}", handles.ApiCitiesGetID(s))
 		}
 		citiesUpdate := cities.Methods("PATCH").Subrouter()
 		{
-			citiesUpdate.HandleFunc("", handles.ApiCitiesPatch(logger))
+			citiesUpdate.HandleFunc("", handles.ApiCitiesPatch(s))
 		}
 		citiesDelete := cities.Methods(http.MethodDelete).Subrouter()
 		{
-			citiesDelete.HandleFunc("", handles.ApiCitiesDelete(logger))
+			citiesDelete.HandleFunc("", handles.ApiCitiesDelete(s))
 		}
 	}
 }
