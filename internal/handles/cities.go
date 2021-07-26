@@ -7,14 +7,24 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/aveplen/REST/internal/models"
 	"github.com/gorilla/mux"
 )
 
 func ApiCitiesPost(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
 	logger.Info("Api Cities Post route initialized")
+	repository := s.GetStore().City()
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("---> Api Cities Post <---")
+		decoder := json.NewDecoder(r.Body)
+		city := &models.City{}
+		decoder.Decode(&city)
+		city, err := repository.Insert(city)
+		if err != nil {
+			logger.Fatal(err)
+		}
+		io.WriteString(w, fmt.Sprintf("%d", city.CityID))
 	}
 }
 
@@ -24,21 +34,36 @@ func ApiCitiesGet(s IServer) http.HandlerFunc {
 	repository := s.GetStore().City()
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("---> Api Cities Get <---")
-		res, err := repository.GetAll()
+		cities, err := repository.GetAll()
 		if err != nil {
 			logger.Panicf("error from db:\n%s\n", err)
 		}
 		encoder := json.NewEncoder(w)
-		encoder.Encode(res)
+		encoder.Encode(cities)
 	}
 }
 
 func ApiCitiesGetID(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
 	logger.Info("Api Cities Get ID route initialized")
+	repository := s.GetStore().City()
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("---> Api Cities Get ID <---")
-		// io.WriteString(w, "Hello!")
+		vars := mux.Vars(r)
+		idStr, ok := vars["id"]
+		if !ok {
+			logger.Fatal("ApiCitiesDeleteID: id not found in request")
+		}
+		id, err := strconv.ParseInt(idStr, 10, 64)
+		if err != nil {
+			logger.Fatal("ApiCitiesGetID: id is not a valid int")
+		}
+		city, err := repository.GetID(id)
+		if err != nil {
+			logger.Fatal(err)
+		}
+		encoder := json.NewEncoder(w)
+		encoder.Encode(city)
 	}
 }
 
