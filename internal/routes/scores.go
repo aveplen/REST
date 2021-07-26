@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
 )
@@ -23,9 +21,10 @@ func RouteScores(parent *mux.Router, s handles.IServer) {
 		{
 			scoresUpdate.HandleFunc("", handles.ApiScoresPatch(s))
 		}
-		scoresDelete := scores.Methods(http.MethodDelete).Subrouter()
+		scoresDelete := scores.Methods("DELETE").Subrouter()
 		{
 			scoresDelete.HandleFunc("", handles.ApiScoresDelete(s))
+			scoresDelete.HandleFunc("/{id:[0-9]+}", handles.ApiScoresDeleteID(s))
 		}
 	}
 }

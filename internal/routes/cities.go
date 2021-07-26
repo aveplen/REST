@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
 )
@@ -23,9 +21,10 @@ func RouteCities(parent *mux.Router, s handles.IServer) {
 		{
 			citiesUpdate.HandleFunc("", handles.ApiCitiesPatch(s))
 		}
-		citiesDelete := cities.Methods(http.MethodDelete).Subrouter()
+		citiesDelete := cities.Methods("DELETE").Subrouter()
 		{
 			citiesDelete.HandleFunc("", handles.ApiCitiesDelete(s))
+			citiesDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCitiesDeleteID(s))
 		}
 	}
 }

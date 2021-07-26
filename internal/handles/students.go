@@ -79,3 +79,22 @@ func ApiStudentsDelete(s IServer) http.HandlerFunc {
 		io.WriteString(w, "Hello!")
 	}
 }
+
+func ApiStudentsDeleteID(s IServer) http.HandlerFunc {
+	logger := s.GetLogger()
+	logger.Info("Api Students Delete ID route initialized")
+	return func(w http.ResponseWriter, r *http.Request) {
+		logger.Infof("---> Api Students Delete ID <---")
+		vars := mux.Vars(r)
+		idStr, ok := vars["id"]
+		if !ok {
+			logger.Fatal("ApiStudentsDeleteID: id not found in request")
+		}
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			panic("ApiStudentsGetID: id is not a valid int")
+		}
+		fmt.Printf("ApiStudentsGetID: %d\n", id)
+		io.WriteString(w, "Hello!")
+	}
+}

@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
 )
@@ -23,9 +21,10 @@ func RouteCridentials(parent *mux.Router, s handles.IServer) {
 		{
 			cridentialsUpdate.HandleFunc("", handles.ApiCridentialsPatch(s))
 		}
-		cridentialsDelete := cridentials.Methods(http.MethodDelete).Subrouter()
+		cridentialsDelete := cridentials.Methods("DELETE").Subrouter()
 		{
 			cridentialsDelete.HandleFunc("", handles.ApiCridentialsDelete(s))
+			cridentialsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCridentialsDeleteID(s))
 		}
 	}
 }

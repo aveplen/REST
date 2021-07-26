@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"net/http"
-
 	"github.com/aveplen/REST/internal/handles"
 	"github.com/gorilla/mux"
 )
@@ -23,9 +21,10 @@ func RouteSchools(parent *mux.Router, s handles.IServer) {
 		{
 			schoolsUpdate.HandleFunc("", handles.ApiSchoolsPatch(s))
 		}
-		schoolsDelete := schools.Methods(http.MethodDelete).Subrouter()
+		schoolsDelete := schools.Methods("DELETE").Subrouter()
 		{
 			schoolsDelete.HandleFunc("", handles.ApiSchoolsDelete(s))
+			schoolsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiSchoolsDeleteID(s))
 		}
 	}
 }
