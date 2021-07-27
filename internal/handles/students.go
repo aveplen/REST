@@ -17,7 +17,7 @@ func ApiStudentsPost(s IServer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Infof("---> Api Students Post <---")
 		jsonDecoder := json.NewDecoder(r.Body)
-		st := models.Student{}
+		st := models.StudentResponce{}
 		err := jsonDecoder.Decode(&st)
 		if err != nil {
 			logger.Panic(err)

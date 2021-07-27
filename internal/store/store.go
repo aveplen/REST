@@ -8,13 +8,13 @@ import (
 )
 
 type Store struct {
-	config                *config.Postgres
-	db                    *sql.DB
-	cityRepository        *CityRepository
-	schoolRepository      *SchoolRepository
-	scoreRepository       *ScoreRepository
-	cridentialsRepository *CridentialsRepository
-	studentRepository     *StudentRepository
+	config         *config.Postgres
+	db             *sql.DB
+	cityRepository *CityRepository
+	// 	schoolRepository      *SchoolRepository
+	// 	scoreRepository       *ScoreRepository
+	// 	cridentialsRepository *CridentialsRepository
+	// 	studentRepository     *StudentRepository
 }
 
 func NewStore(config config.Postgres) *Store {
@@ -61,42 +61,42 @@ func (s *Store) City() *CityRepository {
 	return s.cityRepository
 }
 
-func (s *Store) School() *SchoolRepository {
-	if s.schoolRepository != nil {
-		return s.schoolRepository
-	}
-	s.schoolRepository = &SchoolRepository{
-		store: s,
-	}
-	return s.schoolRepository
-}
+// func (s *Store) School() *SchoolRepository {
+// 	if s.schoolRepository != nil {
+// 		return s.schoolRepository
+// 	}
+// 	s.schoolRepository = &SchoolRepository{
+// 		store: s,
+// 	}
+// 	return s.schoolRepository
+// }
 
-func (s *Store) Score() *ScoreRepository {
-	if s.schoolRepository != nil {
-		return s.scoreRepository
-	}
-	s.scoreRepository = &ScoreRepository{
-		store: s,
-	}
-	return s.scoreRepository
-}
+// func (s *Store) Score() *ScoreRepository {
+// 	if s.schoolRepository != nil {
+// 		return s.scoreRepository
+// 	}
+// 	s.scoreRepository = &ScoreRepository{
+// 		store: s,
+// 	}
+// 	return s.scoreRepository
+// }
 
-func (s *Store) Cridentials() *CridentialsRepository {
-	if s.schoolRepository != nil {
-		return s.cridentialsRepository
-	}
-	s.cridentialsRepository = &CridentialsRepository{
-		store: s,
-	}
-	return s.cridentialsRepository
-}
+// func (s *Store) Cridentials() *CridentialsRepository {
+// 	if s.schoolRepository != nil {
+// 		return s.cridentialsRepository
+// 	}
+// 	s.cridentialsRepository = &CridentialsRepository{
+// 		store: s,
+// 	}
+// 	return s.cridentialsRepository
+// }
 
-func (s *Store) Student() *StudentRepository {
-	if s.schoolRepository != nil {
-		return s.studentRepository
-	}
-	s.studentRepository = &StudentRepository{
-		store: s,
-	}
-	return s.studentRepository
-}
+// func (s *Store) Student() *StudentRepository {
+// 	if s.schoolRepository != nil {
+// 		return s.studentRepository
+// 	}
+// 	s.studentRepository = &StudentRepository{
+// 		store: s,
+// 	}
+// 	return s.studentRepository
+// }

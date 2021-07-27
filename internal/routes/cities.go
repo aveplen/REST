@@ -23,8 +23,7 @@ func RouteCities(parent *mux.Router, s handles.IServer) {
 		}
 		citiesDelete := cities.Methods("DELETE").Subrouter()
 		{
-			citiesDelete.HandleFunc("", handles.ApiCitiesDelete(s))
-			citiesDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCitiesDeleteID(s))
+			citiesDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCitiesDelete(s))
 		}
 	}
 }

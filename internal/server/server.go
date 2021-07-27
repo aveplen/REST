@@ -59,10 +59,10 @@ func (s *Server) GetStore() *store.Store {
 func (s *Server) configureRouter() {
 	api := s.router.PathPrefix("/api").Subrouter()
 	{
-		routes.RouteStudents(api, s)
 		routes.RouteCities(api, s)
-		routes.RouteSchools(api, s)
-		routes.RouteScores(api, s)
-		routes.RouteCridentials(api, s)
+		// 	routes.RouteStudents(api, s)
+		// 	routes.RouteSchools(api, s)
+		// 	routes.RouteScores(api, s)
+		// 	routes.RouteCridentials(api, s)
 	}
 }

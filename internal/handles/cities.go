@@ -1,9 +1,9 @@
 package handles
 
 import (
+	"database/sql"
 	"encoding/json"
-	"fmt"
-	"io"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -13,93 +13,135 @@ import (
 
 func ApiCitiesPost(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
-	logger.Info("Api Cities Post route initialized")
 	repository := s.GetStore().City()
+	logger.Info("Api Cities Post route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("---> Api Cities Post <---")
 		decoder := json.NewDecoder(r.Body)
-		city := &models.City{}
+		var city models.CityInsert
 		decoder.Decode(&city)
-		city, err := repository.Insert(city)
-		if err != nil {
-			logger.Fatal(err)
+		if err := repository.Insert(&city); err != nil {
+			logger.Warnf("cities insert: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("something bad happened"))
+			return
 		}
-		io.WriteString(w, fmt.Sprintf("%d", city.CityID))
+		w.WriteHeader(http.StatusOK)
+		logger.Info("cities insert 200 - OK")
 	}
 }
 
 func ApiCitiesGet(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
-	logger.Info("Api Cities Get route initialized")
 	repository := s.GetStore().City()
+	logger.Info("Api Cities Get route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("---> Api Cities Get <---")
 		cities, err := repository.GetAll()
 		if err != nil {
-			logger.Panicf("error from db:\n%s\n", err)
+			logger.Warnf("cities get all: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("something bad happened"))
+			return
 		}
 		encoder := json.NewEncoder(w)
 		encoder.Encode(cities)
+		w.WriteHeader(http.StatusOK)
+		logger.Info("cities get all 200 - OK")
 	}
 }
 
 func ApiCitiesGetID(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
-	logger.Info("Api Cities Get ID route initialized")
 	repository := s.GetStore().City()
+	logger.Info("Api Cities Get ID route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("---> Api Cities Get ID <---")
 		vars := mux.Vars(r)
 		idStr, ok := vars["id"]
 		if !ok {
-			logger.Fatal("ApiCitiesDeleteID: id not found in request")
+			logger.Warn("cities get id: id not found in request")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("id not found in request\nshould be: /api/cities/{id:[0-9]+}"))
+			return
 		}
 		id, err := strconv.ParseInt(idStr, 10, 64)
 		if err != nil {
-			logger.Fatal("ApiCitiesGetID: id is not a valid int")
+			logger.Warnf("cities get id: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("requested id is not a valid int (probably too large)"))
+			return
 		}
 		city, err := repository.GetID(id)
 		if err != nil {
-			logger.Fatal(err)
+			logger.Warnf("cities get id: %v", err)
+			err := errors.Unwrap(err)
+			switch err {
+			case sql.ErrNoRows:
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("no entry with such index"))
+			default:
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte("something bad happened"))
+			}
+			return
 		}
 		encoder := json.NewEncoder(w)
 		encoder.Encode(city)
+		w.WriteHeader(http.StatusOK)
+		logger.Infof("cities get id(%d) all 200 - OK", id)
 	}
 }
 
 func ApiCitiesPatch(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
+	repository := s.GetStore().City()
 	logger.Info("Api Cities Patch route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("---> Api Cities Patch <---")
-		// io.WriteString(w, "Hello!")
+		decoder := json.NewDecoder(r.Body)
+		var city models.CityUpdate
+		decoder.Decode(&city)
+		if err := repository.Update(&city); err != nil {
+			logger.Warnf("cities update: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("something bad happened"))
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		logger.Info("cities update 200 - OK")
 	}
 }
 
 func ApiCitiesDelete(s IServer) http.HandlerFunc {
 	logger := s.GetLogger()
+	repository := s.GetStore().City()
 	logger.Info("Api Cities Delete route initialized")
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("---> Api Cities Delete <---")
-		// io.WriteString(w, "Hello!")
-	}
-}
-
-func ApiCitiesDeleteID(s IServer) http.HandlerFunc {
-	logger := s.GetLogger()
-	logger.Info("Api Cities Delete ID route initialized")
-	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Infof("---> Api Cities Delete ID <---")
 		vars := mux.Vars(r)
 		idStr, ok := vars["id"]
 		if !ok {
-			logger.Fatal("ApiCitiesDeleteID: id not found in request")
+			logger.Warn("cities delete: id not found in request")
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("id not found in request\nshould be: /api/cities/{id:[0-9]+}"))
+			return
 		}
-		id, err := strconv.Atoi(idStr)
+		id, err := strconv.ParseInt(idStr, 10, 64)
 		if err != nil {
-			panic("ApiCitiesGetID: id is not a valid int")
+			logger.Warnf("cities delete: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte("requested id is not a valid int (probably too large)"))
+			return
 		}
-		fmt.Printf("ApiCitiesGetID: %d\n", id)
-		io.WriteString(w, "Hello!")
+		if repository.Delete(id); err != nil {
+			logger.Warnf("cities delete id: %v", err)
+			switch err {
+			case sql.ErrNoRows:
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("no entry with such index"))
+			default:
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte("something bad happened"))
+			}
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		logger.Infof("cities delete id(%d) all 200 - OK", id)
 	}
 }
