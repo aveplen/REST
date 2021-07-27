@@ -11,10 +11,10 @@ type CridentialsResponce struct {
 }
 
 type CridentialsInsert struct {
-	FirstName   string    `json:"firstName binding:"required"`
-	SecondName  string    `json:"secondName binding:"required"`
-	Gender      string    `json:"gender binding:"required"`
-	DateOfBirth time.Time `json:"dateOfBirth binding:"required"`
+	FirstName   string    `json:"firstName" binding:"required"`
+	SecondName  string    `json:"secondName" binding:"required"`
+	Gender      string    `json:"gender" binding:"required"`
+	DateOfBirth time.Time `json:"dateOfBirth" binding:"required"`
 }
 
 type CridentialsUpdate struct {

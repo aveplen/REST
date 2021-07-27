@@ -8,9 +8,9 @@ type SchoolResponce struct {
 }
 
 type SchoolInsert struct {
-	SchoolNumber string `json:"schoolNumber binding:"required"`
-	CityName     string `json:"cityName binding:"required"`
-	GeoAdress    string `json:"geoAdress binding:"required"`
+	SchoolNumber string `json:"schoolNumber" binding:"required"`
+	CityName     string `json:"cityName" binding:"required"`
+	GeoAdress    string `json:"geoAdress" binding:"required"`
 }
 
 type SchoolUpdate struct {
