@@ -21,8 +21,16 @@ func ApiCitiesPost(s IServer) http.HandlerFunc {
 		decoder.Decode(&city)
 		if err := repository.Insert(&city); err != nil {
 			logger.Warnf("cities insert: %v", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("something bad happened"))
+			switch errors.Unwrap(err) {
+			case sql.ErrNoRows:
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("check request json"))
+				logger.Warnf("%d, %s", http.StatusBadRequest, "check request json")
+			default:
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte("something bad happened"))
+				logger.Warnf("%d, %s", http.StatusInternalServerError, "something bad happened")
+			}
 			return
 		}
 		w.WriteHeader(http.StatusOK)
@@ -72,14 +80,15 @@ func ApiCitiesGetID(s IServer) http.HandlerFunc {
 		city, err := repository.GetID(id)
 		if err != nil {
 			logger.Warnf("cities get id: %v", err)
-			err := errors.Unwrap(err)
-			switch err {
+			switch errors.Unwrap(err) {
 			case sql.ErrNoRows:
 				w.WriteHeader(http.StatusBadRequest)
 				w.Write([]byte("no entry with such index"))
+				logger.Warnf("%d, %s", http.StatusBadRequest, "no entry with such index")
 			default:
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("something bad happened"))
+				logger.Warnf("%d, %s", http.StatusInternalServerError, "something bad happened")
 			}
 			return
 		}
@@ -100,8 +109,16 @@ func ApiCitiesPatch(s IServer) http.HandlerFunc {
 		decoder.Decode(&city)
 		if err := repository.Update(&city); err != nil {
 			logger.Warnf("cities update: %v", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("something bad happened"))
+			switch errors.Unwrap(err) {
+			case sql.ErrNoRows:
+				w.WriteHeader(http.StatusBadRequest)
+				w.Write([]byte("check request json"))
+				logger.Warnf("%d, %s", http.StatusBadRequest, "check request json")
+			default:
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte("something bad happened"))
+				logger.Warnf("%d, %s", http.StatusInternalServerError, "something bad happened")
+			}
 			return
 		}
 		w.WriteHeader(http.StatusOK)
@@ -129,15 +146,17 @@ func ApiCitiesDelete(s IServer) http.HandlerFunc {
 			w.Write([]byte("requested id is not a valid int (probably too large)"))
 			return
 		}
-		if repository.Delete(id); err != nil {
+		if err := repository.Delete(id); err != nil {
 			logger.Warnf("cities delete id: %v", err)
-			switch err {
+			switch errors.Unwrap(err) {
 			case sql.ErrNoRows:
 				w.WriteHeader(http.StatusBadRequest)
 				w.Write([]byte("no entry with such index"))
+				logger.Warnf("%d, %s", http.StatusBadRequest, "no entry with such index")
 			default:
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte("something bad happened"))
+				logger.Warnf("%d, %s", http.StatusInternalServerError, "something bad happened")
 			}
 			return
 		}

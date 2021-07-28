@@ -1,6 +1,7 @@
 package store
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/aveplen/REST/internal/models"
@@ -23,11 +24,14 @@ func (cr *CityRepository) GetAll() (*models.CityArray, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		c := models.CityResponce{}
-		rows.Scan(
+		c := &models.CityResponce{}
+		err := rows.Scan(
 			&c.CityID,
 			&c.CityName,
 		)
+		if err != nil {
+			return nil, fmt.Errorf("get all cities scan: %w", err)
+		}
 		cs.Cities = append(cs.Cities, c)
 	}
 	return cs, nil
@@ -53,13 +57,20 @@ func (cr *CityRepository) GetID(id int64) (*models.CityResponce, error) {
 }
 
 func (cr *CityRepository) Insert(c *models.CityInsert) error {
+	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
 		INSERT INTO cities (city_name)
 		VALUES ($1)
+		RETURNING city_id
 		`,
 		c.CityName,
-	).Err()
+	).Scan(&existCheck)
+
+	if existCheck == nil {
+		return fmt.Errorf("insert city: %w", sql.ErrNoRows)
+	}
+
 	if err != nil {
 		return fmt.Errorf("insert city: %w", err)
 	}
@@ -67,13 +78,21 @@ func (cr *CityRepository) Insert(c *models.CityInsert) error {
 }
 
 func (cr *CityRepository) Update(c *models.CityUpdate) error {
+	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
-		UPDATE cities SET city_name = $2 WHERE city_id = $1
+		UPDATE cities 
+		SET city_name = $2 
+		WHERE city_id = $1
+		RETURNING city_id
 		`,
 		c.CityID,
 		c.CityName,
-	).Err()
+	).Scan(&existCheck)
+
+	if existCheck == nil {
+		return fmt.Errorf("update city: %w", sql.ErrNoRows)
+	}
 
 	if err != nil {
 		return fmt.Errorf("update city: %w", err)
@@ -82,13 +101,19 @@ func (cr *CityRepository) Update(c *models.CityUpdate) error {
 }
 
 func (cr *CityRepository) Delete(id int64) error {
+	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
 		DELETE FROM cities
 		WHERE city_id = $1
+		RETURNING city_id
 		`,
 		id,
-	).Err()
+	).Scan(&existCheck)
+
+	if existCheck == nil {
+		return fmt.Errorf("delete city: %w", sql.ErrNoRows)
+	}
 
 	if err != nil {
 		return fmt.Errorf("delete city: %w", err)

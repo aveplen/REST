@@ -29,3 +29,13 @@ type ScoreUpdate struct {
 	ScoreInsert
 	ScoreID int64 `json:"scoreID" binding:"required"`
 }
+
+type ScoreArray struct {
+	Scores []*ScoreResponce `json:"scores"`
+}
+
+func NewScoreArray() *ScoreArray {
+	return &ScoreArray{
+		Scores: make([]*ScoreResponce, 0),
+	}
+}

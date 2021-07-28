@@ -71,7 +71,7 @@ func (cr *StudentRepository) FindByID(id int64) (*models.Student, error) {
 		&s.School.SchoolNumber,
 		&s.School.City.CityID,
 		&s.School.City.CityName,
-		&s.School.GeoAdress,
+		&s.School.GeoAddress,
 
 		&s.Cridetials.CridentialsID,
 		&s.Cridetials.FirstName,

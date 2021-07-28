@@ -21,3 +21,13 @@ type CridentialsUpdate struct {
 	CridentialsInsert
 	CridentialsID int64 `json:"cridentialsID" binding:"required"`
 }
+
+type CridentialsArray struct {
+	CridentialsArr []*CridentialsResponce `json:"cridentialsArr"`
+}
+
+func NewCridentialsArray() *CridentialsArray {
+	return &CridentialsArray{
+		CridentialsArr: make([]*CridentialsResponce, 0),
+	}
+}

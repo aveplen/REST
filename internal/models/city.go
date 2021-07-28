@@ -15,11 +15,11 @@ type CityUpdate struct {
 }
 
 type CityArray struct {
-	Cities []CityResponce `json:"cities"`
+	Cities []*CityResponce `json:"cities"`
 }
 
 func NewCityArray() *CityArray {
 	return &CityArray{
-		Cities: make([]CityResponce, 0),
+		Cities: make([]*CityResponce, 0),
 	}
 }

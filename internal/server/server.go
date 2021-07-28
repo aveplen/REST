@@ -60,8 +60,8 @@ func (s *Server) configureRouter() {
 	api := s.router.PathPrefix("/api").Subrouter()
 	{
 		routes.RouteCities(api, s)
+		routes.RouteSchools(api, s)
 		// 	routes.RouteStudents(api, s)
-		// 	routes.RouteSchools(api, s)
 		// 	routes.RouteScores(api, s)
 		// 	routes.RouteCridentials(api, s)
 	}
