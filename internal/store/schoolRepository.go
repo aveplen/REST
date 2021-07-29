@@ -15,8 +15,21 @@ func (sr *SchoolRepository) GetAll() (*models.SchoolArray, error) {
 	ss := models.NewSchoolArray()
 	rows, err := sr.store.db.Query(
 		`
-		SELECT school_id, school_number, city_id, geo_address
-		FROM schools
+		SELECT
+			school_id,
+			school_number,
+			city_id,
+			(
+				SELECT
+					city_name
+				FROM
+					cities
+				WHERE
+					cities.city_id = schools.city_id
+			),
+			geo_address
+		FROM
+			schools
 		`,
 	)
 	if err != nil {
@@ -30,6 +43,7 @@ func (sr *SchoolRepository) GetAll() (*models.SchoolArray, error) {
 			&s.SchoolID,
 			&s.SchoolNumber,
 			&s.CityID,
+			&s.CityName,
 			&s.GeoAddress,
 		)
 		if err != nil {
@@ -44,9 +58,14 @@ func (sr *SchoolRepository) GetID(id int64) (*models.SchoolResponce, error) {
 	s := &models.SchoolResponce{SchoolID: id}
 	err := sr.store.db.QueryRow(
 		`
-		SELECT school_number, city_id, geo_address
-		FROM schools
-		WHERE school_id = $1
+		SELECT
+			school_number,
+			city_id,
+			geo_address
+		FROM
+			schools
+		WHERE
+			school_id = $1
 		`,
 		id,
 	).Scan(
@@ -71,7 +90,7 @@ func (sr *SchoolRepository) Insert(s *models.SchoolInsert) error {
 		)
 		VALUES (
 			$1,
-			(SELECT city_id FROM cities WHERE cities.city_name = $2), 
+			(SELECT city_id FROM cities WHERE cities.city_name = $2),
 			$3
 		)
 		RETURNING school_id
@@ -96,13 +115,15 @@ func (sr *SchoolRepository) Update(s *models.SchoolUpdate) error {
 	var existCheck *int64
 	err := sr.store.db.QueryRow(
 		`
-		UPDATE schools 
-		SET 
+		UPDATE schools
+		SET
 			school_number = $1,
 			city_id = (SELECT city_id FROM cities WHERE cities.city_name = $2),
 			geo_address = $3
-		WHERE school_id = $4
-		RETURNING school_id
+		WHERE
+			school_id = $4
+		RETURNING
+			school_id
 		`,
 		s.SchoolNumber,
 		s.CityName,
@@ -124,9 +145,12 @@ func (sr *SchoolRepository) Delete(id int64) error {
 	var existCheck *int64
 	err := sr.store.db.QueryRow(
 		`
-		DELETE FROM schools
-		WHERE school_id = $1
-		RETURNING school_id
+		DELETE FROM
+			schools
+		WHERE
+			school_id = $1
+		RETURNING
+			school_id
 		`,
 		id,
 	).Scan(&existCheck)

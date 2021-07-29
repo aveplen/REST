@@ -61,8 +61,8 @@ func (s *Server) configureRouter() {
 	{
 		routes.RouteCities(api, s)
 		routes.RouteSchools(api, s)
-		// 	routes.RouteStudents(api, s)
-		// 	routes.RouteScores(api, s)
-		// 	routes.RouteCridentials(api, s)
+		routes.RouteCridentials(api, s)
+		routes.RouteStudents(api, s)
+		routes.RouteScores(api, s)
 	}
 }

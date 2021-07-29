@@ -1,21 +1,23 @@
 package models
 
 type StudentResponce struct {
-	StudentID  int64                `json:"studentID"`
-	Score      *ScoreResponce       `json:"score"`
-	School     *SchoolResponce      `json:"school"`
-	Cridetials *CridentialsResponce `json:"cridetials"`
+	StudentID           int64 `json:"studentID"`
+	ScoreResponce       `json:"score"`
+	SchoolResponce      `json:"school"`
+	CridentialsResponce `json:"cridentials"`
 }
 
 type StudentInsert struct {
-	Score      *ScoreResponce       `json:"score" binding:"required"`
-	School     *SchoolResponce      `json:"school" binding:"required"`
-	Cridetials *CridentialsResponce `json:"cridetials" binding:"required"`
+	ScoreInsert       `json:"score" binding:"required"`
+	SchoolResponce    `json:"school" binding:"required"`
+	CridentialsInsert `json:"cridentials" binding:"required"`
 }
 
 type StudentUpdate struct {
-	StudentInsert
-	StudentID int64 `json:"studentID" binding:"required"`
+	ScoreResponce       `json:"score" binding:"required"`
+	SchoolResponce      `json:"school" binding:"required"`
+	CridentialsResponce `json:"cridentials" binding:"required"`
+	StudentID           int64 `json:"studentID" binding:"required"`
 }
 
 type StudentArray struct {

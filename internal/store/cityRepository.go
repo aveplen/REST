@@ -41,9 +41,12 @@ func (cr *CityRepository) GetID(id int64) (*models.CityResponce, error) {
 	c := &models.CityResponce{CityID: id}
 	err := cr.store.db.QueryRow(
 		`
-		SELECT city_id, city_name
-		FROM cities
-		WHERE city_id = $1
+		SELECT
+			city_id, city_name
+		FROM
+			cities
+		WHERE
+			city_id = $1
 		`,
 		id,
 	).Scan(
@@ -60,9 +63,12 @@ func (cr *CityRepository) Insert(c *models.CityInsert) error {
 	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
-		INSERT INTO cities (city_name)
-		VALUES ($1)
-		RETURNING city_id
+		INSERT INTO cities
+			(city_name)
+		VALUES
+			($1)
+		RETURNING
+			city_id
 		`,
 		c.CityName,
 	).Scan(&existCheck)
@@ -81,10 +87,14 @@ func (cr *CityRepository) Update(c *models.CityUpdate) error {
 	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
-		UPDATE cities 
-		SET city_name = $2 
-		WHERE city_id = $1
-		RETURNING city_id
+		UPDATE
+			cities
+		SET
+			city_name = $2
+		WHERE
+			city_id = $1
+		RETURNING
+			city_id
 		`,
 		c.CityID,
 		c.CityName,
@@ -104,9 +114,12 @@ func (cr *CityRepository) Delete(id int64) error {
 	var existCheck *int64
 	err := cr.store.db.QueryRow(
 		`
-		DELETE FROM cities
-		WHERE city_id = $1
-		RETURNING city_id
+		DELETE FROM
+			cities
+		WHERE
+			city_id = $1
+		RETURNING
+			city_id
 		`,
 		id,
 	).Scan(&existCheck)

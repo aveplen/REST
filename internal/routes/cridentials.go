@@ -8,10 +8,15 @@ import (
 func RouteCridentials(parent *mux.Router, s handles.IServer) {
 	cridentials := parent.PathPrefix("/cridentials").Subrouter()
 	{
-		cridentialsCreate := cridentials.Methods("POST").Subrouter()
-		{
-			cridentialsCreate.HandleFunc("", handles.ApiCridentialsPost(s))
-		}
+		// 	Нет смысла добавлять личные данные, которые не прикреплены
+		// 	ни к какому пользователю, поэтому код закомментирован.
+
+		/*
+			cridentialsCreate := cridentials.Methods("POST").Subrouter()
+			{
+				cridentialsCreate.HandleFunc("", handles.ApiCridentialsPost(s))
+			}
+		*/
 		cridentialsRead := cridentials.Methods("GET").Subrouter()
 		{
 			cridentialsRead.HandleFunc("", handles.ApiCridentialsGet(s))
@@ -23,8 +28,7 @@ func RouteCridentials(parent *mux.Router, s handles.IServer) {
 		}
 		cridentialsDelete := cridentials.Methods("DELETE").Subrouter()
 		{
-			cridentialsDelete.HandleFunc("", handles.ApiCridentialsDelete(s))
-			cridentialsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCridentialsDeleteID(s))
+			cridentialsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiCridentialsDelete(s))
 		}
 	}
 }

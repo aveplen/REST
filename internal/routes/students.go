@@ -23,8 +23,7 @@ func RouteStudents(parent *mux.Router, s handles.IServer) {
 		}
 		studentsDelete := students.Methods("DELETE").Subrouter()
 		{
-			studentsDelete.HandleFunc("", handles.ApiStudentsDelete(s))
-			studentsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiStudentsDeleteID(s))
+			studentsDelete.HandleFunc("/{id:[0-9]+}", handles.ApiStudentsDelete(s))
 		}
 	}
 }

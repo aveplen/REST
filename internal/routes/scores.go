@@ -8,10 +8,18 @@ import (
 func RouteScores(parent *mux.Router, s handles.IServer) {
 	scores := parent.PathPrefix("/scores").Subrouter()
 	{
-		scoresCreate := scores.Methods("POST").Subrouter()
-		{
-			scoresCreate.HandleFunc("", handles.ApiScoresPost(s))
-		}
+		//  Этот раут закомментирован, потому что нет смысла
+		//  добавлять результаты, которые никому не принадлежат,
+		//  но соответствующий код обработчика и запроса в базу
+		//  удалять у меня рука не поднялась, поэтому это тоже
+		//  пусть остаётся.
+
+		/*
+			scoresCreate := scores.Methods("POST").Subrouter()
+			{
+				scoresCreate.HandleFunc("", handles.ApiScoresPost(s))
+			}
+		*/
 		scoresRead := scores.Methods("GET").Subrouter()
 		{
 			scoresRead.HandleFunc("", handles.ApiScoresGet(s))
@@ -23,8 +31,7 @@ func RouteScores(parent *mux.Router, s handles.IServer) {
 		}
 		scoresDelete := scores.Methods("DELETE").Subrouter()
 		{
-			scoresDelete.HandleFunc("", handles.ApiScoresDelete(s))
-			scoresDelete.HandleFunc("/{id:[0-9]+}", handles.ApiScoresDeleteID(s))
+			scoresDelete.HandleFunc("/{id:[0-9]+}", handles.ApiScoresDelete(s))
 		}
 	}
 }

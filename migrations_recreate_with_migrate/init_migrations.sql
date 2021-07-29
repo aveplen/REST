@@ -69,17 +69,17 @@ CREATE TABLE cridentials (
 ,   gender              VARCHAR(6)      NOT NULL
 ,   date_of_birth       DATE            NOT NULL
 -- add NOT NULL for authentication
-,   email               VARCHAR(255)
+-- ,   email               VARCHAR(255)
 -- add salted password for authentication
 
-,   CONSTRAINT unique_email UNIQUE (email)
+-- ,   CONSTRAINT unique_email UNIQUE (email)
 );
 
 CREATE TABLE students (
     student_id          BIGSERIAL       NOT NULL    PRIMARY KEY
-,   score_id           BIGINT          NOT NULL
+,   score_id            BIGINT          NOT NULL
 ,   school_id           BIGINT          NOT NULL
-,   cridetials_id       BIGINT          NOT NULL
+,   cridentials_id       BIGINT          NOT NULL
 
 ,   CONSTRAINT score_id_fk FOREIGN KEY (score_id)
         REFERENCES public.scores (score_id) MATCH SIMPLE
@@ -91,7 +91,7 @@ CREATE TABLE students (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 
-,   CONSTRAINT cridetials_id_fk FOREIGN KEY (cridetials_id)
+,   CONSTRAINT cridentials_id_fk FOREIGN KEY (cridentials_id)
         REFERENCES public.cridentials (cridentials_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
