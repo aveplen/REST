@@ -96,3 +96,11 @@ CREATE TABLE students (
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+-- ДОБАВИТЬ ТАБЛИЦУ USERS С ПОЛЬЗОВАТЕЛЯМИ
+-- (user_id, email, encrypted_password, role[fk], student_id[fk])
+
+-- ДОБАВИТЬ ТАБЛИЦУ GENDERS С ПОЛАМИ БЛЯТЬ (ТИПА ENUM)
+-- ИЗМЕНИТЬ ТАБЛИЦУ CRIDENTIALS, ЧТОБЫ GENDER БЫЛ GENDER[fk]
+
+-- ДОБАВИТЬ ТАБЛИЦУ ROLES С РОЛЯМИ (ТИПА ENUM)

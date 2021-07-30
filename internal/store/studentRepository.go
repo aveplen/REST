@@ -171,7 +171,7 @@ func (sr *StudentRepository) GetID(id int64) (*models.StudentResponce, error) {
 	err := sr.store.db.QueryRow(
 		`
 		SELECT
-			score_id,
+			scores.score_id,
 			mathematics,
 			russian,
 			physics,
@@ -182,13 +182,13 @@ func (sr *StudentRepository) GetID(id int64) (*models.StudentResponce, error) {
 			biology,
 			geography_science,
 
-			school_id,
+			schools.school_id,
 			school_number,
-			city_id,
+			cities.city_id,
 			city_name,
 			geo_address,
 
-			cridentials_id,
+			cridentials.cridentials_id,
 			first_name,
 			second_name,
 			gender,
@@ -198,7 +198,7 @@ func (sr *StudentRepository) GetID(id int64) (*models.StudentResponce, error) {
 				INNER JOIN scores ON scores.score_id = students.score_id
 			)
 				INNER JOIN
-					(schools INNER JOIN cities ON school.city_id = cities.city_id)
+					(schools INNER JOIN cities ON schools.city_id = cities.city_id)
 				ON schools.school_id = students.school_id
 			)
 				INNER JOIN cridentials ON cridentials.cridentials_id = students.cridentials_id
