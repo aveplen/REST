@@ -57,22 +57,26 @@ CREATE TABLE schools (
 
 ,   CONSTRAINT city_id_fk FOREIGN KEY (city_id)
         REFERENCES public.cities (city_id) MATCH SIMPLE
-        ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
 
+CREATE TABLE genders (
+    gender_id           BIGSERIAL       NOT NULL    PRIMARY KEY
+,   gender_name         VARCHAR(255)    NOT NULL
+
+,   CONSTRAINT unique_gender_name UNIQUE (gender_name)
+);
 
 CREATE TABLE cridentials (
     cridentials_id      BIGSERIAL       NOT NULL    PRIMARY KEY
 ,   first_name          VARCHAR(255)    NOT NULL
 ,   second_name         VARCHAR(255)    NOT NULL
-,   gender              VARCHAR(6)      NOT NULL
+,   gender_id           BIGINT          NOT NULL
 ,   date_of_birth       DATE            NOT NULL
--- add NOT NULL for authentication
--- ,   email               VARCHAR(255)
--- add salted password for authentication
 
--- ,   CONSTRAINT unique_email UNIQUE (email)
+,   CONSTRAINT gender_id_fk FOREIGN KEY (gender_id)
+        REFERENCES public.genders (gender_id) MATCH SIMPLE
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE students (
@@ -83,24 +87,36 @@ CREATE TABLE students (
 
 ,   CONSTRAINT score_id_fk FOREIGN KEY (score_id)
         REFERENCES public.scores (score_id) MATCH SIMPLE
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 
 ,   CONSTRAINT school_id_fk FOREIGN KEY (school_id)
         REFERENCES public.schools (school_id) MATCH SIMPLE
-        ON UPDATE CASCADE
         ON DELETE RESTRICT
 
 ,   CONSTRAINT cridentials_id_fk FOREIGN KEY (cridentials_id)
         REFERENCES public.cridentials (cridentials_id) MATCH SIMPLE
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
--- ДОБАВИТЬ ТАБЛИЦУ USERS С ПОЛЬЗОВАТЕЛЯМИ
--- (user_id, email, encrypted_password, role[fk], student_id[fk])
+CREATE TABLE roles (
+    role_id             BIGSERIAL       NOT NULL    PRIMARY KEY
+,   role_name           VARCHAR(255)    NOT NULL
 
--- ДОБАВИТЬ ТАБЛИЦУ GENDERS С ПОЛАМИ БЛЯТЬ (ТИПА ENUM)
--- ИЗМЕНИТЬ ТАБЛИЦУ CRIDENTIALS, ЧТОБЫ GENDER БЫЛ GENDER[fk]
+,   CONSTRAINT unique_role_name UNIQUE (role_name)
+);
 
--- ДОБАВИТЬ ТАБЛИЦУ ROLES С РОЛЯМИ (ТИПА ENUM)
+CREATE TABLE users (
+    user_id             BIGSERIAL       NOT NULL    PRIMARY KEY
+,   email               VARCHAR(255)    NOT NULL
+,   encrypted_password  VARCHAR(255)    NOT NULL
+,   role_id             BIGINT          NOT NULL
+,   student_id          BIGINT          
+
+,   CONSTRAINT role_id_fk FOREIGN KEY (role_id)
+        REFERENCES public.roles (role_id) MATCH SIMPLE
+        ON DELETE RESTRICT
+
+,   CONSTRAINT student_id_fk FOREIGN KEY (student_id)
+        REFERENCES public.students (student_id) MATCH SIMPLE
+        ON DELETE RESTRICT
+);

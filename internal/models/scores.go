@@ -1,6 +1,6 @@
 package models
 
-type ScoreResponce struct {
+type ScoreResponse struct {
 	ScoreID          int64 `json:"scoreID"`
 	Mathematics      *int  `json:"mathematics,omitempty"`
 	Russian          *int  `json:"russian,omitempty"`
@@ -31,11 +31,11 @@ type ScoreUpdate struct {
 }
 
 type ScoreArray struct {
-	Scores []*ScoreResponce `json:"scores"`
+	Scores []*ScoreResponse `json:"scores"`
 }
 
 func NewScoreArray() *ScoreArray {
 	return &ScoreArray{
-		Scores: make([]*ScoreResponce, 0),
+		Scores: make([]*ScoreResponse, 0),
 	}
 }

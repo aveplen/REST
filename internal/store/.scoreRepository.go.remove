@@ -36,7 +36,7 @@ func (sr *ScoreRepository) GetAll() (*models.ScoreArray, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		s := &models.ScoreResponce{}
+		s := &models.ScoreResponse{}
 		err := rows.Scan(
 			&s.ScoreID,
 			&s.Mathematics,
@@ -57,8 +57,8 @@ func (sr *ScoreRepository) GetAll() (*models.ScoreArray, error) {
 	return ss, nil
 }
 
-func (sr *ScoreRepository) GetID(id int64) (*models.ScoreResponce, error) {
-	s := &models.ScoreResponce{ScoreID: id}
+func (sr *ScoreRepository) GetID(id int64) (*models.ScoreResponse, error) {
+	s := &models.ScoreResponse{ScoreID: id}
 	err := sr.store.db.QueryRow(
 		`
 		SELECT

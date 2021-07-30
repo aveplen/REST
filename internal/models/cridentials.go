@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type CridentialsResponce struct {
+type CridentialsResponse struct {
 	CridentialsID int64     `json:"cridentialsID"`
 	FirstName     string    `json:"firstName"`
 	SecondName    string    `json:"secondName"`
@@ -23,11 +23,11 @@ type CridentialsUpdate struct {
 }
 
 type CridentialsArray struct {
-	CridentialsArr []*CridentialsResponce `json:"cridentialsArr"`
+	CridentialsArr []*CridentialsResponse `json:"cridentialsArr"`
 }
 
 func NewCridentialsArray() *CridentialsArray {
 	return &CridentialsArray{
-		CridentialsArr: make([]*CridentialsResponce, 0),
+		CridentialsArr: make([]*CridentialsResponse, 0),
 	}
 }

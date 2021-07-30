@@ -24,7 +24,7 @@ func (cr *CityRepository) GetAll() (*models.CityArray, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		c := &models.CityResponce{}
+		c := &models.CityResponse{}
 		err := rows.Scan(
 			&c.CityID,
 			&c.CityName,
@@ -37,8 +37,8 @@ func (cr *CityRepository) GetAll() (*models.CityArray, error) {
 	return cs, nil
 }
 
-func (cr *CityRepository) GetID(id int64) (*models.CityResponce, error) {
-	c := &models.CityResponce{CityID: id}
+func (cr *CityRepository) GetID(id int64) (*models.CityResponse, error) {
+	c := &models.CityResponse{CityID: id}
 	err := cr.store.db.QueryRow(
 		`
 		SELECT

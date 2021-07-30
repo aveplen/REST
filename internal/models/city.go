@@ -1,6 +1,6 @@
 package models
 
-type CityResponce struct {
+type CityResponse struct {
 	CityID   int64  `json:"cityId"`
 	CityName string `json:"cityName"`
 }
@@ -15,11 +15,11 @@ type CityUpdate struct {
 }
 
 type CityArray struct {
-	Cities []*CityResponce `json:"cities"`
+	Cities []*CityResponse `json:"cities"`
 }
 
 func NewCityArray() *CityArray {
 	return &CityArray{
-		Cities: make([]*CityResponce, 0),
+		Cities: make([]*CityResponse, 0),
 	}
 }

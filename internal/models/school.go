@@ -1,9 +1,9 @@
 package models
 
-type SchoolResponce struct {
+type SchoolResponse struct {
 	SchoolID     int64  `json:"schoolID"`
 	SchoolNumber string `json:"schoolNumber"`
-	CityResponce `json:"city"`
+	CityResponse `json:"city"`
 	GeoAddress   string `json:"geoAddress"`
 }
 
@@ -19,11 +19,11 @@ type SchoolUpdate struct {
 }
 
 type SchoolArray struct {
-	Schools []*SchoolResponce `json:"schools"`
+	Schools []*SchoolResponse `json:"schools"`
 }
 
 func NewSchoolArray() *SchoolArray {
 	return &SchoolArray{
-		Schools: make([]*SchoolResponce, 0),
+		Schools: make([]*SchoolResponse, 0),
 	}
 }

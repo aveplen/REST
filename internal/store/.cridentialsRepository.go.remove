@@ -31,7 +31,7 @@ func (cr *CridentialsRepository) GetAll() (*models.CridentialsArray, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		c := &models.CridentialsResponce{}
+		c := &models.CridentialsResponse{}
 		err := rows.Scan(
 			&c.CridentialsID,
 			&c.FirstName,
@@ -47,8 +47,8 @@ func (cr *CridentialsRepository) GetAll() (*models.CridentialsArray, error) {
 	return cs, nil
 }
 
-func (cr *CridentialsRepository) GetID(id int64) (*models.CridentialsResponce, error) {
-	c := &models.CridentialsResponce{CridentialsID: id}
+func (cr *CridentialsRepository) GetID(id int64) (*models.CridentialsResponse, error) {
+	c := &models.CridentialsResponse{CridentialsID: id}
 	err := cr.store.db.QueryRow(
 		`
 		SELECT

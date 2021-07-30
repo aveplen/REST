@@ -1,31 +1,31 @@
 package models
 
-type StudentResponce struct {
+type StudentResponse struct {
 	StudentID           int64 `json:"studentID"`
-	ScoreResponce       `json:"score"`
-	SchoolResponce      `json:"school"`
-	CridentialsResponce `json:"cridentials"`
+	ScoreResponse       `json:"score"`
+	SchoolResponse      `json:"school"`
+	CridentialsResponse `json:"cridentials"`
 }
 
 type StudentInsert struct {
 	ScoreInsert       `json:"score" binding:"required"`
-	SchoolResponce    `json:"school" binding:"required"`
+	SchoolResponse    `json:"school" binding:"required"`
 	CridentialsInsert `json:"cridentials" binding:"required"`
 }
 
 type StudentUpdate struct {
-	ScoreResponce       `json:"score" binding:"required"`
-	SchoolResponce      `json:"school" binding:"required"`
-	CridentialsResponce `json:"cridentials" binding:"required"`
+	ScoreResponse       `json:"score" binding:"required"`
+	SchoolResponse      `json:"school" binding:"required"`
+	CridentialsResponse `json:"cridentials" binding:"required"`
 	StudentID           int64 `json:"studentID" binding:"required"`
 }
 
 type StudentArray struct {
-	Students []*StudentResponce `json:"students"`
+	Students []*StudentResponse `json:"students"`
 }
 
 func NewStudentsArray() *StudentArray {
 	return &StudentArray{
-		Students: make([]*StudentResponce, 0),
+		Students: make([]*StudentResponse, 0),
 	}
 }
