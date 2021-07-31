@@ -15,7 +15,6 @@ type Store struct {
 	// cridentialsRepository *CridentialsRepository
 	// scoreRepository       *ScoreRepository
 	// studentRepository     *StudentRepository
-	authRepository *AuthRepository
 }
 
 func NewStore(config config.Postgres) *Store {

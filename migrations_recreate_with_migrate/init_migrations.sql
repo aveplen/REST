@@ -66,6 +66,8 @@ CREATE TABLE genders (
 
 ,   CONSTRAINT unique_gender_name UNIQUE (gender_name)
 );
+INSERT INTO genders (gender_name) VALUES ('male');
+INSERT INTO genders (gender_name) VALUES ('female');
 
 CREATE TABLE cridentials (
     cridentials_id      BIGSERIAL       NOT NULL    PRIMARY KEY
@@ -104,13 +106,15 @@ CREATE TABLE roles (
 
 ,   CONSTRAINT unique_role_name UNIQUE (role_name)
 );
+INSERT INTO roles (role_name) VALUES ('admin');
+INSERT INTO roles (role_name) VALUES ('student');
 
 CREATE TABLE users (
     user_id             BIGSERIAL       NOT NULL    PRIMARY KEY
 ,   email               VARCHAR(255)    NOT NULL
 ,   encrypted_password  VARCHAR(255)    NOT NULL
 ,   role_id             BIGINT          NOT NULL
-,   student_id          BIGINT          
+,   student_id          BIGINT
 
 ,   CONSTRAINT role_id_fk FOREIGN KEY (role_id)
         REFERENCES public.roles (role_id) MATCH SIMPLE
