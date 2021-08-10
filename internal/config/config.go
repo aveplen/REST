@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -9,23 +11,29 @@ type (
 		Srv Server   `yaml:"server"`
 		Pg  Postgres `yaml:"postgres"`
 		Log Logrus   `yaml:"logrus"`
+		JWT JWT      `yaml:"jwt"`
 	}
 
 	Server struct {
-		BindAddr string `yaml:"bind_addr" env:"BINDADDR"`
+		BindAddr string `yaml:"bind_addr"`
 	}
 
 	Postgres struct {
-		Host     string `yaml:"host" env:"HOST"`
-		Port     int    `yaml:"port" env:"PORT"`
-		User     string `yaml:"user" env:"USER"`
-		Password string `yaml:"password" env:"PASSWORD"`
-		DBName   string `yaml:"dbname" env:"DBNAME"`
-		SSLMode  string `yaml:"sslmode" env:"SSLMODE"`
+		Host     string `yaml:"host"`
+		Port     int    `yaml:"port"`
+		User     string `yaml:"user"`
+		Password string `yaml:"password"`
+		DBName   string `yaml:"dbname"`
+		SSLMode  string `yaml:"sslmode"`
 	}
 
 	Logrus struct {
-		LogLevel string `yaml:"log_level" env:"LOGLEVEL"`
+		LogLevel string `yaml:"log_level"`
+	}
+
+	JWT struct {
+		Expire time.Duration `yaml:"expire"`
+		Key    string        `yaml:"key"`
 	}
 )
 

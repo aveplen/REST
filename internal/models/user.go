@@ -1,31 +1,40 @@
 package models
 
-type UserResponse struct {
-	UserID            int64        `json:"userID"`
-	Email             string       `json:"email"`
-	EncryptedPassword string       `json:"encryptedPassword"`
-	Role              RoleResponse `json:"role"`
-	*StudentResponse  `json:"student,omitempty"`
-}
-
-type UserInsert struct {
-	Email             string       `json:"email"`
-	EncryptedPassword string       `json:"encryptedPassword"`
-	Role              RoleResponse `json:"role"`
-	*StudentResponse  `json:"student,omitempty"`
-}
-
-type UserUpdate struct {
-	UserInsert
-	UserID int64 `json:"userID" binding:"required"`
-}
-
-type UserArray struct {
-	Users []*UserResponse `json:"users"`
-}
-
-func NewUserArray() *UserArray {
-	return &UserArray{
-		Users: make([]*UserResponse, 0),
+type (
+	UserResponse struct {
+		UserID            int64            `json:"user_id"`
+		Email             string           `json:"email"`
+		EncryptedPassword string           `json:"encrypted_password"`
+		Role              string           `json:"role"`
+		StudResponse      *StudentResponse `json:"student,omitempty"`
 	}
-}
+
+	UserInsert struct {
+		Email             string `json:"email" binding:"required"`
+		EncryptedPassword string `json:"encrypted_password" binding:"required"`
+	}
+
+	UserUpdate struct {
+		UserID int64 `json:"user_id" binding:"required"`
+		UserInsert
+	}
+
+	UserAttach struct {
+		UserID    int64
+		StudentID int64
+	}
+
+	UserRole struct {
+		UserID int64  `json:"user_id"`
+		Role   string `json:"role"`
+	}
+
+	UserAuth struct {
+		Email    string `json:"email" binding:"required"`
+		Password string `json:"password" binding:"required"`
+	}
+
+	UserExistance struct {
+		Email string
+	}
+)

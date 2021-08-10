@@ -11,3 +11,8 @@ postgres:
 
 logrus:
   log_level: "debug"
+
+jwt:
+  expire: "24h"
+  # Нельзя хранить ключи в конфиге
+  key: "qwerty123"
